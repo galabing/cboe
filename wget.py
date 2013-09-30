@@ -18,6 +18,8 @@ query_data = None
 for line in text.splitlines():
   #print('DEBUG: %s' % line)
   assert not line.startswith('  Set-Cookie: DownLoadError=Symbol Not Found.')
+  assert not line.startswith(
+      '  Set-Cookie: DownLoadError=No option found for the symbol.')
   if line.startswith('  Set-Cookie: QueryData='):
     query_data = line[14:line.find(';')]
 assert query_data is not None
@@ -30,4 +32,6 @@ print('DEBUG: return code is %d' % retcode)
 
 for line in text.splitlines():
   assert not line.startswith('  Set-Cookie: DownLoadError=Symbol Not Found.')
+  assert not line.startswith(
+      '  Set-Cookie: DownLoadError=No option found for the symbol.')
 

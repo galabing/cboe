@@ -16,7 +16,7 @@ TMP_FORM_DATA_FILE = '/tmp/download_option_quotes_form_data.txt'
 TMP_POST_DATA_FILE = '/tmp/download_option_quotes_post_data.txt'
 TMP_OUTPUT_FILE = '/tmp/download_option_quotes_output.csv'
 
-SLEEP_SEC_DL = 5
+SLEEP_SEC_DL = 10
 SLEEP_SEC_TK = 10
 
 def print_and_run(cmd):
@@ -51,8 +51,9 @@ def main():
     tickers = fp.read().splitlines()
   print('Processing %d tickers' % len(tickers))
 
+  skip = False
   for i in range(len(tickers)):
-    if i > 0:
+    if i > 0 and not skip:
       print('Sleeping for %.2f sec before next ticker' % SLEEP_SEC_TK)
       time.sleep(SLEEP_SEC_TK)
 
@@ -63,8 +64,10 @@ def main():
     if os.path.isfile(output_file):
       if not args.overwrite:
         print('Output file exists for %s, skipping' % ticker)
+        skip = True
         continue
       os.remove(output_file)
+    skip = False
 
     # Download the root aspx file, parse out __EVENTVALIDATION and __VIEWSTATE.
     download(ASPX_URL, TMP_ASPX_FILE)
